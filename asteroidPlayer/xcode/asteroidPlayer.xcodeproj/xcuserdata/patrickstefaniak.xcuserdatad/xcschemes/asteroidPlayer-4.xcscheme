@@ -68,6 +68,11 @@
             isEnabled = "YES">
          </EnvironmentVariable>
          <EnvironmentVariable
+            key = "socket"
+            value = "30004"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
             key = "portIn"
             value = "20004"
             isEnabled = "YES">

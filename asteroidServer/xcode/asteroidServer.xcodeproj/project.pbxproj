@@ -16,14 +16,12 @@
 		00B784B60FF439BC000DE1D7 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B20FF439BC000DE1D7 /* CoreAudio.framework */; };
 		00B9955A1B128DF400A5C623 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B995581B128DF400A5C623 /* IOKit.framework */; };
 		00B9955B1B128DF400A5C623 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B995591B128DF400A5C623 /* IOSurface.framework */; };
+		4A69F3EE1D186E3100CA3069 /* bullet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A69F3ED1D186E3100CA3069 /* bullet.cpp */; };
 		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
-		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		42C4D0975FF84035B735E074 /* Osc.h in Headers */ = {isa = PBXBuildFile; fileRef = ED4A1836E0174E0AA45487CD /* Osc.h */; };
-		A9627D21206B485197065213 /* Osc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 402E7727DD9B4822A415B546 /* Osc.cpp */; };
-		F3812144A8F846DD9BDCCB52 /* asteroidServer_Prefix.pch in Headers */ = {isa = PBXBuildFile; fileRef = DAC61CF60F094CA8ACDDD0CF /* asteroidServer_Prefix.pch */; };
-		C141DD654B3148ED890922C1 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = 5A4C6D4C37C248749FEC2148 /* CinderApp.icns */; };
-		243DB403D3C44F5A88BFDCC3 /* Resources.h in Headers */ = {isa = PBXBuildFile; fileRef = DE35C846A0544848B5687204 /* Resources.h */; };
 		767BA203E74044589D981D44 /* asteroidServerApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D48C7250EA4A44FDBBEE1F33 /* asteroidServerApp.cpp */; };
+		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		A9627D21206B485197065213 /* Osc.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 402E7727DD9B4822A415B546 /* Osc.cpp */; };
+		C141DD654B3148ED890922C1 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = 5A4C6D4C37C248749FEC2148 /* CinderApp.icns */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,15 +37,17 @@
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		402E7727DD9B4822A415B546 /* Osc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = Osc.cpp; path = ../blocks/OSC/src/Osc.cpp; sourceTree = "<group>"; };
+		4A69F3ED1D186E3100CA3069 /* bullet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bullet.cpp; path = ../src/bullet.cpp; sourceTree = "<group>"; };
+		4A69F3EF1D186E3F00CA3069 /* bullet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = bullet.h; path = ../src/bullet.h; sourceTree = "<group>"; };
 		5323E6B10EAFCA74003A9687 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
+		5A4C6D4C37C248749FEC2148 /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* asteroidServer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = asteroidServer.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		D48C7250EA4A44FDBBEE1F33 /* asteroidServerApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; path = ../src/asteroidServerApp.cpp; sourceTree = "<group>"; name = asteroidServerApp.cpp; };
-		DE35C846A0544848B5687204 /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ../include/Resources.h; sourceTree = "<group>"; name = Resources.h; };
-		5A4C6D4C37C248749FEC2148 /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; name = CinderApp.icns; };
-		D6159CCC72BB4AF995E09050 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; name = Info.plist; };
-		DAC61CF60F094CA8ACDDD0CF /* asteroidServer_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = asteroidServer_Prefix.pch; sourceTree = "<group>"; name = asteroidServer_Prefix.pch; };
-		402E7727DD9B4822A415B546 /* Osc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; path = ../blocks/OSC/src/Osc.cpp; sourceTree = "<group>"; name = Osc.cpp; };
-		ED4A1836E0174E0AA45487CD /* Osc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ../blocks/OSC/src/Osc.h; sourceTree = "<group>"; name = Osc.h; };
+		D48C7250EA4A44FDBBEE1F33 /* asteroidServerApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = asteroidServerApp.cpp; path = ../src/asteroidServerApp.cpp; sourceTree = "<group>"; };
+		D6159CCC72BB4AF995E09050 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DAC61CF60F094CA8ACDDD0CF /* asteroidServer_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = asteroidServer_Prefix.pch; sourceTree = "<group>"; };
+		DE35C846A0544848B5687204 /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../include/Resources.h; sourceTree = "<group>"; };
+		ED4A1836E0174E0AA45487CD /* Osc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Osc.h; path = ../blocks/OSC/src/Osc.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,12 +72,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		01B97315FEAEA392516A2CEA /* Blocks */ = {
+			isa = PBXGroup;
+			children = (
+				53B5B85C72C746699186405B /* OSC */,
+			);
+			name = Blocks;
+			sourceTree = "<group>";
+		};
 		080E96DDFE201D6D7F000001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
 				D48C7250EA4A44FDBBEE1F33 /* asteroidServerApp.cpp */,
+				4A69F3ED1D186E3100CA3069 /* bullet.cpp */,
 			);
 			name = Source;
+			sourceTree = "<group>";
+		};
+		0B3A5BBB70C24E8B9A7E2AEE /* src */ = {
+			isa = PBXGroup;
+			children = (
+				402E7727DD9B4822A415B546 /* Osc.cpp */,
+				ED4A1836E0174E0AA45487CD /* Osc.h */,
+			);
+			name = src;
 			sourceTree = "<group>";
 		};
 		1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */ = {
@@ -128,36 +146,12 @@
 			name = asteroidServer;
 			sourceTree = "<group>";
 		};
-		0B3A5BBB70C24E8B9A7E2AEE /* src */ = {
-			isa = PBXGroup;
-			children = (
-				402E7727DD9B4822A415B546 /* Osc.cpp */,
-				ED4A1836E0174E0AA45487CD /* Osc.h */,
-			);
-			name = src;
-			sourceTree = "<group>";
-		};
-		53B5B85C72C746699186405B /* OSC */ = {
-			isa = PBXGroup;
-			children = (
-				0B3A5BBB70C24E8B9A7E2AEE /* src */,
-			);
-			name = OSC;
-			sourceTree = "<group>";
-		};
-		01B97315FEAEA392516A2CEA /* Blocks */ = {
-			isa = PBXGroup;
-			children = (
-				53B5B85C72C746699186405B /* OSC */,
-			);
-			name = Blocks;
-			sourceTree = "<group>";
-		};
 		29B97315FDCFA39411CA2CEA /* Headers */ = {
 			isa = PBXGroup;
 			children = (
 				DE35C846A0544848B5687204 /* Resources.h */,
 				DAC61CF60F094CA8ACDDD0CF /* asteroidServer_Prefix.pch */,
+				4A69F3EF1D186E3F00CA3069 /* bullet.h */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
@@ -178,6 +172,14 @@
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		53B5B85C72C746699186405B /* OSC */ = {
+			isa = PBXGroup;
+			children = (
+				0B3A5BBB70C24E8B9A7E2AEE /* src */,
+			);
+			name = OSC;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -206,6 +208,8 @@
 /* Begin PBXProject section */
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "asteroidServer" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
@@ -242,6 +246,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				767BA203E74044589D981D44 /* asteroidServerApp.cpp in Sources */,
+				4A69F3EE1D186E3100CA3069 /* bullet.cpp in Sources */,
 				A9627D21206B485197065213 /* Osc.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -253,17 +258,17 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
-				DEAD_CODE_STRIPPING = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = asteroidServer_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = asteroidServer_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -285,12 +290,12 @@
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = asteroidServer_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"NDEBUG=1",
 					"$(inherited)",
 				);
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = asteroidServer_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -307,7 +312,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CINDER_PATH = "../../../../dropShadow/Cinder";
+				CINDER_PATH = ../../../../dropShadow/Cinder;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++11";
 				CLANG_CXX_LIBRARY = "libc++";
 				ENABLE_TESTABILITY = YES;
@@ -317,10 +322,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
-				USER_HEADER_SEARCH_PATHS = (
-					"\"$(CINDER_PATH)/include\" ../include",
-					../blocks/OSC/src,
-				);
+				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include ../blocks/OSC/src";
 			};
 			name = Debug;
 		};
@@ -328,7 +330,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				CINDER_PATH = "../../../../dropShadow/Cinder";
+				CINDER_PATH = ../../../../dropShadow/Cinder;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++11";
 				CLANG_CXX_LIBRARY = "libc++";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -336,10 +338,7 @@
 				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\"";
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				SDKROOT = macosx;
-				USER_HEADER_SEARCH_PATHS = (
-					"\"$(CINDER_PATH)/include\" ../include",
-					../blocks/OSC/src,
-				);
+				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include ../blocks/OSC/src";
 			};
 			name = Release;
 		};

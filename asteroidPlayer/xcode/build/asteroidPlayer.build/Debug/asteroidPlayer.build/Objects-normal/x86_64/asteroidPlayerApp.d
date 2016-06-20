@@ -265,4 +265,5 @@ dependencies: \
   ../../../../dropShadow/Cinder/include/asio/windows/stream_handle.hpp \
   ../../../../dropShadow/Cinder/include/asio/windows/stream_handle_service.hpp \
   ../../../../dropShadow/Cinder/include/asio/write_at.hpp \
-  ../../../../dropShadow/Cinder/include/asio/impl/write_at.hpp
+  ../../../../dropShadow/Cinder/include/asio/impl/write_at.hpp \
+  /Users/patrickstefaniak/Documents/asteroid_games/network/asteroidPlayer/src/ship.h
