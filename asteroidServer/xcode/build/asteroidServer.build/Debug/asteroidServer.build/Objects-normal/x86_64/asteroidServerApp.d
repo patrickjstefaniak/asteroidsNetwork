@@ -266,4 +266,6 @@ dependencies: \
   ../../../../dropShadow/Cinder/include/asio/windows/stream_handle_service.hpp \
   ../../../../dropShadow/Cinder/include/asio/write_at.hpp \
   ../../../../dropShadow/Cinder/include/asio/impl/write_at.hpp \
-  /Users/patrickstefaniak/Documents/asteroid_games/network/asteroidServer/src/bullet.h
+  /Users/patrickstefaniak/Documents/asteroid_games/network/asteroidServer/src/bullet.h \
+  /Users/patrickstefaniak/Documents/asteroid_games/network/asteroidServer/src/asteroidControl.h \
+  /Users/patrickstefaniak/Documents/asteroid_games/network/asteroidServer/src/asteroid.h

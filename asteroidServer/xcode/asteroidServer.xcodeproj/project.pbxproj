@@ -17,6 +17,8 @@
 		00B9955A1B128DF400A5C623 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B995581B128DF400A5C623 /* IOKit.framework */; };
 		00B9955B1B128DF400A5C623 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B995591B128DF400A5C623 /* IOSurface.framework */; };
 		4A69F3EE1D186E3100CA3069 /* bullet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A69F3ED1D186E3100CA3069 /* bullet.cpp */; };
+		4A69F3F11D1979C300CA3069 /* asteroidControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A69F3F01D1979C300CA3069 /* asteroidControl.cpp */; };
+		4A69F3F41D1979F600CA3069 /* asteroid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4A69F3F31D1979F600CA3069 /* asteroid.cpp */; };
 		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
 		767BA203E74044589D981D44 /* asteroidServerApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D48C7250EA4A44FDBBEE1F33 /* asteroidServerApp.cpp */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -40,6 +42,10 @@
 		402E7727DD9B4822A415B546 /* Osc.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = Osc.cpp; path = ../blocks/OSC/src/Osc.cpp; sourceTree = "<group>"; };
 		4A69F3ED1D186E3100CA3069 /* bullet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = bullet.cpp; path = ../src/bullet.cpp; sourceTree = "<group>"; };
 		4A69F3EF1D186E3F00CA3069 /* bullet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = bullet.h; path = ../src/bullet.h; sourceTree = "<group>"; };
+		4A69F3F01D1979C300CA3069 /* asteroidControl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = asteroidControl.cpp; path = ../src/asteroidControl.cpp; sourceTree = "<group>"; };
+		4A69F3F31D1979F600CA3069 /* asteroid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = asteroid.cpp; path = ../src/asteroid.cpp; sourceTree = "<group>"; };
+		4A69F3F51D197A0A00CA3069 /* asteroid.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = asteroid.h; path = ../src/asteroid.h; sourceTree = "<group>"; };
+		4A69F3F71D197ADE00CA3069 /* asteroidControl.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = asteroidControl.h; path = ../src/asteroidControl.h; sourceTree = "<group>"; };
 		5323E6B10EAFCA74003A9687 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
 		5A4C6D4C37C248749FEC2148 /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* asteroidServer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = asteroidServer.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -85,6 +91,8 @@
 			children = (
 				D48C7250EA4A44FDBBEE1F33 /* asteroidServerApp.cpp */,
 				4A69F3ED1D186E3100CA3069 /* bullet.cpp */,
+				4A69F3F01D1979C300CA3069 /* asteroidControl.cpp */,
+				4A69F3F31D1979F600CA3069 /* asteroid.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -152,6 +160,8 @@
 				DE35C846A0544848B5687204 /* Resources.h */,
 				DAC61CF60F094CA8ACDDD0CF /* asteroidServer_Prefix.pch */,
 				4A69F3EF1D186E3F00CA3069 /* bullet.h */,
+				4A69F3F51D197A0A00CA3069 /* asteroid.h */,
+				4A69F3F71D197ADE00CA3069 /* asteroidControl.h */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
@@ -245,6 +255,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A69F3F41D1979F600CA3069 /* asteroid.cpp in Sources */,
+				4A69F3F11D1979C300CA3069 /* asteroidControl.cpp in Sources */,
 				767BA203E74044589D981D44 /* asteroidServerApp.cpp in Sources */,
 				4A69F3EE1D186E3100CA3069 /* bullet.cpp in Sources */,
 				A9627D21206B485197065213 /* Osc.cpp in Sources */,

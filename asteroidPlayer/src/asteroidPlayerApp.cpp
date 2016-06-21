@@ -16,6 +16,7 @@ class asteroidPlayerApp : public App {
 	void mouseDown( MouseEvent event ) override;
 	void update() override;
 	void draw() override;
+    void drawBody(vec2 serverS[]);
     void keyDown(KeyEvent event) override;
     void keyUp(KeyEvent event) override;
     void switchSet(KeyEvent event, bool on);
@@ -25,9 +26,11 @@ class asteroidPlayerApp : public App {
     
     osc::SenderUdp      mSender;
     osc::ReceiverUdp    mReciever;
-    int                 player, bulletTimer;
-    vec2                smPos;
+    int                 player, bulletTimer, scores[4], lives[4];
+    vec2                serverShips[4][2];
+    vector<vec2>        serverBullets, hits;
     ship                mShip;
+    bool                serverWait[3];
 };
 
 asteroidPlayerApp::asteroidPlayerApp()
@@ -40,10 +43,65 @@ void asteroidPlayerApp::setup()
 {
     setWindowSize(800, 600);
     player = atoi(getenv("player"));
-    mReciever.setListener("/mouseclick/",
+    for(bool b: serverWait){
+        b = true;
+    }
+
+    mReciever.setListener("/shipstate/",
                           [&](const osc::Message &msg){
-                              smPos.x = msg[0].flt();
-                              smPos.y = msg[1].flt();
+                              //positions of ships
+                              ////4 ships, center and direction
+                              int i = 0;
+                              for(int j = 0; j < 4; j++){
+                                  serverShips[j][0].x = msg[i].flt();
+                                  i++;
+                                  serverShips[j][0].y = msg[i].flt();
+                                  i++;
+                                  serverShips[j][1].x = msg[i].flt();
+                                  i++;
+                                  serverShips[j][1].y = msg[i].flt();
+                                  i++;
+                              }
+                              scores[0] = msg[16].int32();
+                              scores[1] = msg[17].int32();
+                              scores[2] = msg[18].int32();
+                              scores[3] = msg[19].int32();
+                              
+                              lives[0] = msg[20].int32();
+                              lives[1] = msg[21].int32();
+                              lives[2] = msg[22].int32();
+                              lives[3] = msg[23].int32();
+                              
+                              serverWait[0] = true;
+                              //scores
+                              //lives
+                          });
+    mReciever.setListener("/bullets/",
+                          [&](const osc::Message &msg){
+                              //first is number of bullets
+                              int i = msg[0].int32();
+                              serverBullets.clear();
+                              for(int j = 1; j <= i * 2; j++){
+                                  vec2 bul;
+                                  bul.x = msg[j].flt();
+                                  j++;
+                                  bul.y = msg[j].flt();
+                                  serverBullets.push_back(bul);
+                              }
+                              serverWait[1] = true;
+                          });
+    mReciever.setListener("/shipHits/",
+                          [&](const osc::Message &msg){
+                              int i = msg[0].int32();
+                              hits.clear();
+                              for(int j = 1; j <= i * 2; j++){
+                                  vec2 ht;
+                                  ht.x = msg[j].flt();
+                                  j++;
+                                  ht.y = msg[j].flt();
+                                  hits.push_back(ht);
+                              }
+                              serverWait[2] = true;
                           });
     mReciever.bind();
     mReciever.listen();
@@ -62,6 +120,27 @@ void asteroidPlayerApp::mouseDown( MouseEvent event )
 
 void asteroidPlayerApp::update()
 {
+    if(!serverWait[0] || !serverWait[1] || !serverWait[2]){
+        
+    }else{
+    
+    //see if ship is hit
+    
+    for(vec2 &h: hits){
+        if(mShip.invincible <= 0){
+            for(vec2 p: mShip.body.getPoints()){
+                if(p == h){
+                    if(mShip.lives == 0){
+                        mShip.isActive = false;
+                    }else{
+                        mShip.die();
+                        cout << " hit " ;
+                    }
+                }
+            }
+        }
+    }
+    
     mShip.update(buttonsDown);
 
     osc::Message msg("/shipPos/");
@@ -82,17 +161,40 @@ void asteroidPlayerApp::update()
         }
         
     }
-    msg.append(buttonsDown[SHOOT]);
-    
+    msg.append(int(mShip.lives));
+        
     mSender.send(msg);
+    
+    for(bool b: serverWait){
+        b = false;
+    }
+    }
 }
 
 void asteroidPlayerApp::draw()
 {
 	gl::clear( Color( 0, 0, 0 ) );
-    gl::color(0,0,1);
-    gl::drawSolidCircle(smPos, 10);
+    gl::color(1,1,1);
+    for(int i = 0; i < 4; i++){
+        if(i+1 != player){
+            drawBody(serverShips[i]);
+        }
+    }
     mShip.draw();
+}
+
+void asteroidPlayerApp::drawBody(vec2 serverS[])
+{
+    Path2d bodies;
+    bodies.moveTo(serverS[0] + (serverS[1] * 15.0f));
+    vec2 perp = mat2(0,-1,1,0) * serverS[1];
+    bodies.lineTo(serverS[0] + (perp * 5.0f));
+    bodies.lineTo(serverS[0] - (perp * 5.0f));
+    bodies.close();
+    gl::draw(bodies);
+    for(vec2 &b: serverBullets){
+        gl::drawSolidRect(Rectf(b - vec2(2), b + vec2(2)));
+    }
 }
 
 void asteroidPlayerApp::keyDown(KeyEvent event)
