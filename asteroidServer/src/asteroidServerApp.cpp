@@ -169,95 +169,106 @@ void asteroidServerApp::update()
         ////menudelay to 100
         ////numplayers?
     }else{
-    //update ship positions
-    for(int i = 0; i < 4; i++){
-        auto nBody = constructBodies(pBody[i]);
-        auto iter = nBody.begin();
-        pPoints[i][0] = *iter;
-        ++iter;
-        pPoints[i][1] = *iter;
-        ++iter;
-        pPoints[i][2] = *iter;
-    }
-    
-    //see if there are new bullets
-    for(int i = 0; i < 4; i++){
-        if(pShoot[i]){
-            bullets.push_back(bullet(pBody[i][1], pBody[i][0], i));
+        //update ship positions
+        for(int i = 0; i < 4; i++){
+            auto nBody = constructBodies(pBody[i]);
+            auto iter = nBody.begin();
+            pPoints[i][0] = *iter;
+            ++iter;
+            pPoints[i][1] = *iter;
+            ++iter;
+            pPoints[i][2] = *iter;
         }
-    }
-    
-    //see if any asteroids were hit
-    //ac.update returns list of asteroids hit by bullets
-    //and list of ships hit by asteroids respectively
-    vector<list<vec2>> hits = ac.update(pPoints, getBulletsPos());
-    for(vec2 &h : hits.front()){
-        for(bullet &b: bullets){
-            if(b.pos == h){
-                b.hit();
-                pScore[b.shotFrom] += 100;
+        
+        //see if there are new bullets
+        for(int i = 0; i < 4; i++){
+            if(pShoot[i]){
+                bullets.push_back(bullet(pBody[i][1], pBody[i][0], i));
             }
         }
-    }
-    
-    //update bullets, remove ones that are expired
-    for(list<bullet>::iterator b = bullets.begin(); b!=bullets.end();){
-        b->update();
-        if(!b->isAlive){
-            auto c = b;
-            ++b;
-            bullets.erase(c);
-        }else{
-            ++b;
+        
+        //see if any asteroids were hit
+        //ac.update returns list of asteroids hit by bullets
+        //and list of ships hit by asteroids respectively
+        vector<list<vec2>> hits = ac.update(pPoints, getBulletsPos());
+        for(vec2 &h : hits.front()){
+            for(bullet &b: bullets){
+                if(b.pos == h){
+                    b.hit();
+                    pScore[b.shotFrom] += 100;
+                }
+            }
         }
-    }
-    
-    //see if game over
-    
-    if(pLives[0] == 0 && pLives[1] == 0 && pLives[2] == 0 && pLives[3] == 0){
-        gameOver = true;
-        menuDelay = 100;
-    }
-    
-    //send report to other players
-    osc::Message msg("/shipstate/");
-    //positions of ships
-    for(int j = 0; j < 4; j++){
-        msg.append(pBody[j][0].x);
-        msg.append(pBody[j][0].y);
-        msg.append(pBody[j][1].x);
-        msg.append(pBody[j][1].y);
-    }
-    msg.append(pScore[0]);
-    msg.append(pScore[1]);
-    msg.append(pScore[2]);
-    msg.append(pScore[3]);
-    msg.append(pLives[0]);
-    msg.append(pLives[1]);
-    msg.append(pLives[2]);
-    msg.append(pLives[3]);
-    broadcast(msg);
-    //scores
-    //lives
-    //pos of hit ships
-    osc::Message msgh("/shipHits/");
-    msgh.append(int(hits.back().size()));
-    for(vec2 &h: hits.back()){
-        msgh.append(float(h.x));
-        msgh.append(float(h.y));
-    }
-    broadcast(msgh);
-    
-    ///separate messages?
-    //positions of asteroids
-    //positions of bullets
-    osc::Message msgb("/bullets/");
-    msgb.append(int(bullets.size()));
-    for(bullet &b: bullets){
-        msgb.append(b.pos.x);
-        msgb.append(b.pos.y);
-    }
-    broadcast(msgb);
+        
+        //update bullets, remove ones that are expired
+        for(list<bullet>::iterator b = bullets.begin(); b!=bullets.end();){
+            b->update();
+            if(!b->isAlive){
+                auto c = b;
+                ++b;
+                bullets.erase(c);
+            }else{
+                ++b;
+            }
+        }
+        
+        //see if game over
+        
+        if(pLives[0] == 0 && pLives[1] == 0 && pLives[2] == 0 && pLives[3] == 0){
+            gameOver = true;
+            menuDelay = 100;
+        }
+        
+        //send report to other players
+        osc::Message msg("/shipstate/");
+        //positions of ships
+        for(int j = 0; j < 4; j++){
+            msg.append(pBody[j][0].x);
+            msg.append(pBody[j][0].y);
+            msg.append(pBody[j][1].x);
+            msg.append(pBody[j][1].y);
+        }
+        msg.append(pScore[0]);
+        msg.append(pScore[1]);
+        msg.append(pScore[2]);
+        msg.append(pScore[3]);
+        msg.append(pLives[0]);
+        msg.append(pLives[1]);
+        msg.append(pLives[2]);
+        msg.append(pLives[3]);
+        broadcast(msg);
+        //scores
+        //lives
+        //pos of hit ships
+        osc::Message msgh("/shipHits/");
+        msgh.append(int(hits.back().size()));
+        for(vec2 &h: hits.back()){
+            msgh.append(float(h.x));
+            msgh.append(float(h.y));
+        }
+        broadcast(msgh);
+        
+        ///separate messages?
+        //positions of asteroids
+        //positions of bullets
+        osc::Message msgb("/bullets/");
+        msgb.append(int(bullets.size()));
+        for(bullet &b: bullets){
+            msgb.append(b.pos.x);
+            msgb.append(b.pos.y);
+        }
+        broadcast(msgb);
+        
+        osc::Message msga("/asteroids/");
+        msgb.append(int(ac.mAsteroids.size()));
+        for(asteroid &a: ac.mAsteroids){
+            msga.append(float(a.center.x));
+            msga.append(float(a.center.y));
+            msga.append(a.isBig);
+        }
+        broadcast(msga);
+        
+        
     }
 }
 

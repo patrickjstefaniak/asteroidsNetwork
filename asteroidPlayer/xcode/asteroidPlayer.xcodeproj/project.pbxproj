@@ -17,6 +17,7 @@
 		00B9955A1B128DF400A5C623 /* IOKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B995581B128DF400A5C623 /* IOKit.framework */; };
 		00B9955B1B128DF400A5C623 /* IOSurface.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B995591B128DF400A5C623 /* IOSurface.framework */; };
 		0AC081B5DE754C9D857E3C89 /* asteroidPlayerApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 12FD117BE5DB411AA325E02A /* asteroidPlayerApp.cpp */; };
+		4AD196DC1D19EE9F002BCA94 /* asteroid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4AD196DB1D19EE9F002BCA94 /* asteroid.cpp */; };
 		4AE5C7D71D11FC4200EB7525 /* ship.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4AE5C7D61D11FC4200EB7525 /* ship.cpp */; };
 		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
 		76FE69B89C6A4A739543A421 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = 02194E434AB842E3B654EC41 /* CinderApp.icns */; };
@@ -41,6 +42,8 @@
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		46EDD55808A348688605C418 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		4AD196DB1D19EE9F002BCA94 /* asteroid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = asteroid.cpp; path = ../src/asteroid.cpp; sourceTree = "<group>"; };
+		4AD196DD1D19EEAF002BCA94 /* asteroid.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = asteroid.h; path = ../src/asteroid.h; sourceTree = "<group>"; };
 		4AE5C7D61D11FC4200EB7525 /* ship.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ship.cpp; path = ../src/ship.cpp; sourceTree = "<group>"; };
 		4AE5C7D81D11FC5600EB7525 /* ship.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = ship.h; path = ../src/ship.h; sourceTree = "<group>"; };
 		5293322F8907456198961326 /* asteroidPlayer_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = asteroidPlayer_Prefix.pch; sourceTree = "<group>"; };
@@ -85,6 +88,7 @@
 			children = (
 				12FD117BE5DB411AA325E02A /* asteroidPlayerApp.cpp */,
 				4AE5C7D61D11FC4200EB7525 /* ship.cpp */,
+				4AD196DB1D19EE9F002BCA94 /* asteroid.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -143,6 +147,7 @@
 				90D0D5EBEBC343939AB302F9 /* Resources.h */,
 				5293322F8907456198961326 /* asteroidPlayer_Prefix.pch */,
 				4AE5C7D81D11FC5600EB7525 /* ship.h */,
+				4AD196DD1D19EEAF002BCA94 /* asteroid.h */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
@@ -245,6 +250,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4AD196DC1D19EE9F002BCA94 /* asteroid.cpp in Sources */,
 				0AC081B5DE754C9D857E3C89 /* asteroidPlayerApp.cpp in Sources */,
 				C8E0435A8F2A4B91ABD5A376 /* Osc.cpp in Sources */,
 				4AE5C7D71D11FC4200EB7525 /* ship.cpp in Sources */,

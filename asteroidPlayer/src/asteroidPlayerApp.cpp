@@ -4,6 +4,7 @@
 
 #include "Osc.h"
 #include "ship.h"
+#include "asteroid.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -17,6 +18,7 @@ class asteroidPlayerApp : public App {
 	void update() override;
 	void draw() override;
     void drawBody(vec2 serverS[]);
+    void drawInterface();
     void keyDown(KeyEvent event) override;
     void keyUp(KeyEvent event) override;
     void switchSet(KeyEvent event, bool on);
@@ -26,11 +28,13 @@ class asteroidPlayerApp : public App {
     
     osc::SenderUdp      mSender;
     osc::ReceiverUdp    mReciever;
-    int                 player, bulletTimer, scores[4], lives[4];
+    int                 player, bulletTimer, scores[4], lives[4], numPlayers, menuDelay;
     vec2                serverShips[4][2];
     vector<vec2>        serverBullets, hits;
     ship                mShip;
-    bool                serverWait[3];
+    bool                serverWait[3], startScreen, gameOver;
+    TextBox             scoreBoard, title, spaceContinue;
+    asteroid            mAsteroids;
 };
 
 asteroidPlayerApp::asteroidPlayerApp()
@@ -42,7 +46,12 @@ asteroidPlayerApp::asteroidPlayerApp()
 void asteroidPlayerApp::setup()
 {
     setWindowSize(800, 600);
+    numPlayers = 4;
+    menuDelay = 0;
     player = atoi(getenv("player"));
+    spaceContinue = TextBox().font(Font("Courier" , 30)).size(vec2(getWindowWidth(), 50)).alignment(TextBox::CENTER);
+    scoreBoard = TextBox().font(Font("Courier", 15)).size(vec2(getWindowWidth()/4, 50)).alignment(TextBox::LEFT);
+    title = TextBox().font(Font("Courier", 70)).size(vec2(getWindowWidth(),100)).alignment(TextBox::CENTER);
     for(bool b: serverWait){
         b = true;
     }
@@ -102,6 +111,19 @@ void asteroidPlayerApp::setup()
                                   hits.push_back(ht);
                               }
                               serverWait[2] = true;
+                          });
+    mReciever.setListener("/asteroids/",
+                          [&](const osc::Message &msg){
+                              int i = msg[0].int32();
+                              mAsteroids.clear();
+                              for(int j = 1; j <= i * 3; j++){
+                                  vec2 as;
+                                  as.x = msg[j].flt();
+                                  j++;
+                                  as.y = msg[j].flt();
+                                  j++;
+                                  mAsteroids.pushback(as, msg[j].boolean());
+                              }
                           });
     mReciever.bind();
     mReciever.listen();
@@ -181,6 +203,8 @@ void asteroidPlayerApp::draw()
         }
     }
     mShip.draw();
+    drawInterface();
+    mAsteroids.draw();
 }
 
 void asteroidPlayerApp::drawBody(vec2 serverS[])
@@ -196,6 +220,50 @@ void asteroidPlayerApp::drawBody(vec2 serverS[])
         gl::drawSolidRect(Rectf(b - vec2(2), b + vec2(2)));
     }
 }
+
+void asteroidPlayerApp::drawInterface()
+{
+    gl::color(1,1,1);
+    if(startScreen){
+        title.text("a s t e r o i d s");
+        gl::pushMatrices();
+        gl::translate(vec2(0,getWindowHeight()/4 + 50));
+        gl::draw(gl::Texture2d::create(title.render()));
+        gl::translate(vec2(0,150));
+        spaceContinue.text("players: " + to_string(numPlayers));
+        gl::draw(gl::Texture2d::create(spaceContinue.render()));
+        gl::translate(vec2(0,100));
+        if(menuDelay <= 0){
+            spaceContinue.text("----press space to start----");
+            gl::draw(gl::Texture2d::create(spaceContinue.render()));
+        }
+        gl::popMatrices();
+    }else{
+        gl::pushMatrices();
+        gl::translate(vec2(-70, 0));
+        for(int i = 0; i < numPlayers; i ++){
+            scoreBoard.text("p" + to_string(i+1) + " - lives: " + to_string(lives[i]) +
+                            "\n     score: " + to_string(scores[i]));
+            gl::translate(vec2(getWindowWidth() * 1/(numPlayers+1), 0));
+            gl::draw(gl::Texture2d::create(scoreBoard.render()));
+        }
+        gl::popMatrices();
+        
+        if(gameOver){
+            title.text("g a m e   o v e r");
+            gl::pushMatrices();
+            gl::translate(vec2(0,getWindowHeight()/3 + 50));
+            gl::draw(gl::Texture2d::create(title.render()));
+            gl::translate(vec2(0,100));
+            if(menuDelay <= 0){
+                spaceContinue.text("----press space to continue----");
+                gl::draw(gl::Texture2d::create(spaceContinue.render()));
+            }
+            gl::popMatrices();
+        }
+    }
+}
+
 
 void asteroidPlayerApp::keyDown(KeyEvent event)
 {
