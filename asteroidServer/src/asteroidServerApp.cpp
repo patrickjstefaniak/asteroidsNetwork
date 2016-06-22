@@ -260,7 +260,7 @@ void asteroidServerApp::update()
         broadcast(msgb);
         
         osc::Message msga("/asteroids/");
-        msgb.append(int(ac.mAsteroids.size()));
+        msga.append(int(ac.mAsteroids.size()));
         for(asteroid &a: ac.mAsteroids){
             msga.append(float(a.center.x));
             msga.append(float(a.center.y));

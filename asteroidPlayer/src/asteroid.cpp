@@ -50,5 +50,6 @@ void asteroid::draw(){
             b.close();
             gl::draw(b);
         }
+        ++i;
     }
 }

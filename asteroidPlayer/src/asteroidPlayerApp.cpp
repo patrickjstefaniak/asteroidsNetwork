@@ -46,6 +46,7 @@ asteroidPlayerApp::asteroidPlayerApp()
 void asteroidPlayerApp::setup()
 {
     setWindowSize(800, 600);
+    startScreen = gameOver = false;
     numPlayers = 4;
     menuDelay = 0;
     player = atoi(getenv("player"));
