@@ -23,6 +23,7 @@ public:
     void draw();
     vector<list<vec2>> update(vec2 s[4][3], list<vec2> bullets);
     void createAsteroids(int num);
+    void clear();
     
     list<asteroid> mAsteroids;
     list<vec2>      shipPos;

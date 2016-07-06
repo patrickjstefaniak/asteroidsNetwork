@@ -101,3 +101,6 @@ void asteroidControl::createAsteroids(int num){
     }
 }
 
+void asteroidControl::clear(){
+    mAsteroids.clear();
+}

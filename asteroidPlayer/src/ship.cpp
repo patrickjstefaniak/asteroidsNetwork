@@ -132,7 +132,7 @@ void ship::die()
     velocity = vec2(0);
     forward = vec2(0,-1);
     invincible = 150;
-    if(lives < 0){
+    if(lives <= 0){
         //move offscreen?
         //wait until new game, other ships could still be playing
         isActive = false;

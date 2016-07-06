@@ -17,25 +17,27 @@ class asteroidServerApp : public App {
 	void mouseDown( MouseEvent event ) override;
 	void update() override;
 	void draw() override;
-    vector<vec2> constructBodies(vec2 sBody[]);
-    list<vec2> getBulletsPos();
-    void broadcast(osc::Message msg);
-    void drawInterface();
-    void startingCommunication();
     
+    vector<vec2>    constructBodies(vec2 sBody[]);
+    list<vec2>      getBulletsPos();
+    void            startGame();
+    void            endGame();
+    void            broadcast(osc::Message msg);
+    void            drawInterface();
+    void            listenerSetup();
     
+    osc::SenderUdp      mSender0;
     osc::SenderUdp      mSender1;
-    osc::ReceiverUdp    mReciever1;
     osc::SenderUdp      mSender2;
-    osc::ReceiverUdp    mReciever2;
     osc::SenderUdp      mSender3;
-    osc::ReceiverUdp    mReciever3;
-    osc::SenderUdp      mSender4;
-    osc::ReceiverUdp    mReciever4;
+    osc::ReceiverUdp    mReceiver0;
+    osc::ReceiverUdp    mReceiver1;
+    osc::ReceiverUdp    mReceiver2;
+    osc::ReceiverUdp    mReceiver3;
     
     //first vec2 of pBody is center, second is direction
     vec2            pBody[4][2], pPoints[4][3];
-    bool            pShoot[4], startScreen, gameOver;
+    bool            pShoot[4], startScreen, gameOver, pActive[4], pResponse[4];
     int             pScore[4], pLives[4], menuDelay, numPlayers;
     list<bullet>    bullets;
     asteroidControl ac;
@@ -45,14 +47,14 @@ class asteroidServerApp : public App {
 
 
 asteroidServerApp::asteroidServerApp()
-:mSender1(10005, "127.0.0.1", 20001)
-,mReciever1(10001)
-,mSender2(10006, "127.0.0.1", 20002)
-,mReciever2(10002)
-,mSender3(10007, "127.0.0.1", 20003)
-,mReciever3(10003)
-,mSender4(10008, "127.0.0.1", 20004)
-,mReciever4(10004)
+:mSender0(10005, "127.0.0.1", 20001)
+,mReceiver0(10001)
+,mSender1(10006, "127.0.0.1", 20002)
+,mReceiver1(10002)
+,mSender2(10007, "127.0.0.1", 20003)
+,mReceiver2(10003)
+,mSender3(10008, "127.0.0.1", 20004)
+,mReceiver3(10004)
 {
 }
 
@@ -62,7 +64,8 @@ asteroidServerApp::asteroidServerApp()
 void asteroidServerApp::setup()
 {
     setWindowSize(800, 600);
-    startScreen = gameOver = false;
+    startScreen = true;
+    gameOver = false;
     ac = asteroidControl(pPoints);
     spaceContinue = TextBox().font(Font("Courier" , 30)).size(vec2(getWindowWidth(), 50)).alignment(TextBox::CENTER);
     scoreBoard = TextBox().font(Font("Courier", 15)).size(vec2(getWindowWidth()/4, 50)).alignment(TextBox::LEFT);
@@ -74,62 +77,12 @@ void asteroidServerApp::setup()
     for(int &i: pLives){
         i = 3;
     }
-    
-    //set up listeners
-    mReciever1.setListener("/shipPos/",
-                          [&](const osc::Message &msg){
-                              pBody[0][0].x = msg[0].flt();
-                              pBody[0][0].y = msg[1].flt();
-                              pBody[0][1].x = msg[2].flt();
-                              pBody[0][1].y = msg[3].flt();
-                              pShoot[0] = msg[4].boolean();
-                              pLives[0] = msg[5].int32();
-                          });
-    mReciever1.bind();
-    mReciever1.listen();
-    mSender1.bind();
-    
-    mReciever2.setListener("/shipPos/",
-                           [&](const osc::Message &msg){
-                               pBody[1][0].x = msg[0].flt();
-                               pBody[1][0].y = msg[1].flt();
-                               pBody[1][1].x = msg[2].flt();
-                               pBody[1][1].y = msg[3].flt();
-                               pShoot[1] = msg[4].boolean();
-                               pLives[1] = msg[5].int32();
-                           });
-    mReciever2.bind();
-    mReciever2.listen();
-    mSender2.bind();
-    
-    mReciever3.setListener("/shipPos/",
-                           [&](const osc::Message &msg){
-                               pBody[2][0].x = msg[0].flt();
-                               pBody[2][0].y = msg[1].flt();
-                               pBody[2][1].x = msg[2].flt();
-                               pBody[2][1].y = msg[3].flt();
-                               pShoot[2] = msg[4].boolean();
-                               pLives[2] = msg[5].int32();
-                           });
-    mReciever3.bind();
-    mReciever3.listen();
-    mSender3.bind();
-    
-    mReciever4.setListener("/shipPos/",
-                           [&](const osc::Message &msg){
-                               pBody[3][0].x = msg[0].flt();
-                               pBody[3][0].y = msg[1].flt();
-                               pBody[3][1].x = msg[2].flt();
-                               pBody[3][1].y = msg[3].flt();
-                               pShoot[3] = msg[4].boolean();
-                               pLives[3] = msg[5].int32();
-                           });
-    mReciever4.bind();
-    mReciever4.listen();
-    mSender4.bind();
     for(int i = 0; i < 4; i ++){
         pShoot[i] = false;
+        pActive[i] = false;
+        pResponse[i] = false;
     }
+    listenerSetup();
 }
 
 
@@ -137,14 +90,7 @@ void asteroidServerApp::setup()
 
 void asteroidServerApp::mouseDown( MouseEvent event )
 {
-    /*osc::Message msg("/mouseclick/");
-    msg.append(event.getX());
-    msg.append(event.getY());
-    
-    mSender1.send(msg);
-    mSender2.send(msg);
-    mSender3.send(msg);
-    mSender4.send(msg); */
+
 }
 
 
@@ -153,22 +99,36 @@ void asteroidServerApp::mouseDown( MouseEvent event )
 void asteroidServerApp::update()
 {
     if(startScreen){
-        //listen to see what players are connected
-        ////send message to them to tell them they are connected?
-        //if one of them presses shoot
-        ////count number of players
-        ////create asteroids
-        //what to do if new players try to connect?
-        ////not allow
-        ////send back message? or just ignore
+ 
+        
+        
     }else if(gameOver){
-        //see if button pressed to move to start menu
-        ////erase scores, lives back to 3
-        ////reset ship positions (offscreen?)
-        ////clear asteroids
-        ////menudelay to 100
-        ////numplayers?
+        if(menuDelay <= 0){
+            gameOver = false;
+            startScreen = true;
+            for(int i = 0; i < 4 ; i++){
+                pScore[i] = 0;
+                pLives[i] = 3;
+                pActive[i] = pResponse[i] = false;
+            }
+            ac.clear();
+            bullets.clear();
+            numPlayers = 0;
+        }else{
+            menuDelay --;
+        }
+        
+        
     }else{
+        for(int i = 0; i < 4; i++){
+            if(pActive[i]){
+                if(!pResponse[i]){
+                    break;
+                }
+            }
+        }
+        //gameplay
+        
         //update ship positions
         for(int i = 0; i < 4; i++){
             auto nBody = constructBodies(pBody[i]);
@@ -214,10 +174,15 @@ void asteroidServerApp::update()
         
         //see if game over
         
-        if(pLives[0] == 0 && pLives[1] == 0 && pLives[2] == 0 && pLives[3] == 0){
-            gameOver = true;
-            menuDelay = 100;
+        for(int i = 0; i < 4 ; i++){
+            if(pActive[i] && pLives[i] > 0){
+                break;
+            }
+            if(i == 3){
+                endGame();
+            }
         }
+        
         
         //send report to other players
         osc::Message msg("/shipstate/");
@@ -268,7 +233,9 @@ void asteroidServerApp::update()
         }
         broadcast(msga);
         
-        
+        for(auto &p: pResponse){
+            p = false;
+        }
     }
 }
 
@@ -321,14 +288,39 @@ list<vec2> asteroidServerApp::getBulletsPos()
 }
 
 
+void asteroidServerApp::startGame()
+{
+    startScreen = false;
+    int count = 0;
+    for(int i = 0; i < 4 ; i++){
+        if(pActive[i]){
+            count ++;
+        }else{
+            pLives[i] = -1;
+            pScore[i] = 0;
+        }
+    }
+    numPlayers = count;
+    
+}
 
+void asteroidServerApp::endGame()
+{
+    //send "/endgame/" message w a true bool
+    //start timer
+    gameOver = true;
+    osc::Message end("/endgame/");
+    end.append(true);
+    broadcast(end);
+    menuDelay = 500;
+}
 
 void asteroidServerApp::broadcast(osc::Message msg)
 {
+    mSender0.send(msg);
     mSender1.send(msg);
     mSender2.send(msg);
     mSender3.send(msg);
-    mSender4.send(msg);
 }
 
 void asteroidServerApp::drawInterface()
@@ -339,20 +331,28 @@ void asteroidServerApp::drawInterface()
         gl::translate(vec2(0,getWindowHeight()/4 + 50));
         gl::draw(gl::Texture2d::create(title.render()));
         gl::translate(vec2(0,150));
-        spaceContinue.text("players: " + to_string(numPlayers));
+        string activeplayers;
+        for(int i = 0; i < 4; i++){
+            if(pActive[i]){
+                activeplayers = activeplayers + " " + to_string(i + 1);
+            }
+        }
+        spaceContinue.text("players active: " + activeplayers);
         gl::draw(gl::Texture2d::create(spaceContinue.render()));
         gl::translate(vec2(0,100));
-        if(menuDelay <= 0){
-            spaceContinue.text("----press space to start----");
-            gl::draw(gl::Texture2d::create(spaceContinue.render()));
-        }
+        spaceContinue.text("----waiting for players----");
+        gl::draw(gl::Texture2d::create(spaceContinue.render()));
         gl::popMatrices();
     }else{
         gl::pushMatrices();
         gl::translate(vec2(-70, 0));
+        int j = 0;
         for(int i = 0; i < numPlayers; i ++){
-            scoreBoard.text("p" + to_string(i+1) + " - lives: " + to_string(pLives[i]) +
-                            "\n     score: " + to_string(pScore[i]));
+            while(!pActive[j]){
+                j++;
+            }
+            scoreBoard.text("p" + to_string(j+1) + " - lives: " + to_string(pLives[j]) +
+                            "\n     score: " + to_string(pScore[j]));
             gl::translate(vec2(getWindowWidth() * 1/(numPlayers+1), 0));
             gl::draw(gl::Texture2d::create(scoreBoard.render()));
         }
@@ -363,19 +363,169 @@ void asteroidServerApp::drawInterface()
             gl::pushMatrices();
             gl::translate(vec2(0,getWindowHeight()/3 + 50));
             gl::draw(gl::Texture2d::create(title.render()));
-            gl::translate(vec2(0,100));
-            if(menuDelay <= 0){
-                spaceContinue.text("----press space to continue----");
-                gl::draw(gl::Texture2d::create(spaceContinue.render()));
-            }
             gl::popMatrices();
         }
     }
 }
 
-void asteroidServerApp::startingCommunication()
+//trying to consolidate didnt work, sender/reciever objects didnt like it
+void asteroidServerApp::listenerSetup()
 {
+    mSender0.bind();
+    mReceiver0.setListener("/shipPos/",
+                           [&](const osc::Message &msg){
+                               pBody[0][0].x = msg[0].flt();
+                               pBody[0][0].y = msg[1].flt();
+                               pBody[0][1].x = msg[2].flt();
+                               pBody[0][1].y = msg[3].flt();
+                               pShoot[0] = msg[4].boolean();
+                               pLives[0] = msg[5].int32();
+                               pResponse[0] = true;
+                           });
+    mReceiver0.setListener("/start/",
+                           [&](const osc::Message &msg){
+                               //getting this message means player is present
+                               ////send back message that it was recognized
+                               pActive[0] = msg[0].boolean();
+                               osc::Message starting("/startgame/");
+                               starting.append(true);
+                               ////send true if game is starting
+                               //includes if the player is trying to start the game
+                               if(msg[1].boolean()){
+                                   startGame();
+                               }
+                               
+                               if(!startScreen){
+                                   starting.append(true);
+                                   starting.append(int(numPlayers));
+                                   starting.append(pActive[0]);
+                                   starting.append(pActive[1]);
+                                   starting.append(pActive[2]);
+                                   starting.append(pActive[3]);
+                               }else{
+                                   starting.append(false);
+                               }
+                               mSender0.send(starting);
+                           });
+    mReceiver0.bind();
+    mReceiver0.listen();
     
+    mSender1.bind();
+    mReceiver1.setListener("/shipPos/",
+                           [&](const osc::Message &msg){
+                               pBody[1][0].x = msg[0].flt();
+                               pBody[1][0].y = msg[1].flt();
+                               pBody[1][1].x = msg[2].flt();
+                               pBody[1][1].y = msg[3].flt();
+                               pShoot[1] = msg[4].boolean();
+                               pLives[1] = msg[5].int32();
+                               pResponse[1] = true;
+                           });
+    mReceiver1.setListener("/start/",
+                           [&](const osc::Message &msg){
+                               //getting this message means player is present
+                               ////send back message that it was recognized
+                               pActive[1] = msg[0].boolean();
+                               osc::Message starting("/startgame/");
+                               starting.append(true);
+                               ////send true if game is starting
+                               //includes if the player is trying to start the game
+                               if(msg[1].boolean()){
+                                   startGame();
+                               }
+                               
+                               if(!startScreen){
+                                   starting.append(true);
+                                   starting.append(int(numPlayers));
+                                   starting.append(pActive[0]);
+                                   starting.append(pActive[1]);
+                                   starting.append(pActive[2]);
+                                   starting.append(pActive[3]);
+                               }else{
+                                   starting.append(false);
+                               }
+                               mSender1.send(starting);
+                           });
+    mReceiver1.bind();
+    mReceiver1.listen();
+    
+    mSender2.bind();
+    mReceiver2.setListener("/shipPos/",
+                           [&](const osc::Message &msg){
+                               pBody[2][0].x = msg[0].flt();
+                               pBody[2][0].y = msg[1].flt();
+                               pBody[2][1].x = msg[2].flt();
+                               pBody[2][1].y = msg[3].flt();
+                               pShoot[2] = msg[4].boolean();
+                               pLives[2] = msg[5].int32();
+                               pResponse[2] = true;
+                           });
+    mReceiver2.setListener("/start/",
+                           [&](const osc::Message &msg){
+                               //getting this message means player is present
+                               ////send back message that it was recognized
+                               pActive[2] = msg[0].boolean();
+                               osc::Message starting("/startgame/");
+                               starting.append(true);
+                               ////send true if game is starting
+                               //includes if the player is trying to start the game
+                               if(msg[1].boolean()){
+                                   startGame();
+                               }
+                               
+                               if(!startScreen){
+                                   starting.append(true);
+                                   starting.append(int(numPlayers));
+                                   starting.append(pActive[0]);
+                                   starting.append(pActive[1]);
+                                   starting.append(pActive[2]);
+                                   starting.append(pActive[3]);
+                               }else{
+                                   starting.append(false);
+                               }
+                               mSender2.send(starting);
+                           });
+    mReceiver2.bind();
+    mReceiver2.listen();
+    
+    mSender3.bind();
+    mReceiver3.setListener("/shipPos/",
+                           [&](const osc::Message &msg){
+                               pBody[3][0].x = msg[0].flt();
+                               pBody[3][0].y = msg[1].flt();
+                               pBody[3][1].x = msg[2].flt();
+                               pBody[3][1].y = msg[3].flt();
+                               pShoot[3] = msg[4].boolean();
+                               pLives[3] = msg[5].int32();
+                               pResponse[3] = true;
+                           });
+    mReceiver3.setListener("/start/",
+                           [&](const osc::Message &msg){
+                               //getting this message means player is present
+                               ////send back message that it was recognized
+                               pActive[3] = msg[0].boolean();
+                               osc::Message starting("/startgame/");
+                               starting.append(true);
+                               ////send true if game is starting
+                               //includes if the player is trying to start the game
+                               if(msg[1].boolean()){
+                                   startGame();
+                               }
+                               
+                               if(!startScreen){
+                                   starting.append(true);
+                                   starting.append(int(numPlayers));
+                                   starting.append(pActive[0]);
+                                   starting.append(pActive[1]);
+                                   starting.append(pActive[2]);
+                                   starting.append(pActive[3]);
+                               }else{
+                                   starting.append(false);
+                               }
+                               mSender3.send(starting);
+                           });
+    mReceiver3.bind();
+    mReceiver3.listen();
 }
 
 CINDER_APP( asteroidServerApp, RendererGl )
